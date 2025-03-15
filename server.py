@@ -1,0 +1,27 @@
+from flask import Flask,request,jsonify
+from jobfind import *
+import sys
+
+app=Flask(__name__)
+
+
+@app.route('/job_finder',methods=['POST'])
+def job_finder():
+    try:
+        data=request.json
+        riasec=data.get("riasecscore",[])
+        for i in range(6):
+            riasec[i]=riasec[i]/8
+        print(riasec)
+        result=findJob(riasec)
+        jobs=[]
+        for i in range(3):
+            jobs.append(result[i].name)            
+        print(jsonify({"jobs": jobs}))
+        return jsonify({"jobs": jobs})
+    except Exception as e:
+        print(str(e))
+        return((str(e)),500)
+
+if __name__=='__main__':
+    app.run(host='0.0.0.0',port=5000,debug=True)
