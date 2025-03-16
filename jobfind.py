@@ -125,9 +125,10 @@ def findJob(riasec):
     
 def fetch():
     try:
-        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.DictCursor)
-        mydb.cursor.execute("select * from jobs")
-        data = cursor.fetchall()
+        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.Cursor)
+        with mydb.cursor() as cursor:
+            cursor.execute("select * from jobs")
+            data = cursor.fetchall()
         mydb.close()
         return data
     except Exception as e:
