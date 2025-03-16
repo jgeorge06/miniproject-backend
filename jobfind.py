@@ -123,13 +123,16 @@ def findJob(riasec):
         return pc
     
 def fetch():
-    mydb=mysql.connector.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"))
-    cursor=mydb.cursor()
-    cursor.execute("select * from jobs")
-    data = cursor.fetchall()
-    cursor.close()
-    mydb.close()
-    return data
+    try:
+        mydb=mysql.connector.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"))
+        cursor=mydb.cursor()
+        cursor.execute("select * from jobs")
+        data = cursor.fetchall()
+        cursor.close()
+        mydb.close()
+        return data
+    except Exception as e:
+        print("Error: ", e)
 
     
 def sort(e):
