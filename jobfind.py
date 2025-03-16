@@ -46,6 +46,7 @@ def PC(riasec):
     jobs=[]
     data=fetch()
     for job in data:
+        print(job)
         numerator=0
         denominator1=0
         denominator2=0
@@ -53,6 +54,7 @@ def PC(riasec):
         Y=0
         for i in range (6):
             X+=riasec[i]
+            print(float(job[i+1]))
             Y+=float(job[i+1])
         X/=6
         Y/=6

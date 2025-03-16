@@ -13,7 +13,7 @@ def job_finder():
         riasec=data.get("riasecscore",[])
         for i in range(6):
             riasec[i]=riasec[i]/8
-        result=findJob(riasec)
+        result=PC(riasec)
         jobs=[]
         for i in range(3):
             jobs.append(result[i].name)            
