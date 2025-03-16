@@ -1,6 +1,7 @@
 import os
 import math
-import mysql.connector
+import pymysql
+import pymysql.cursors
 
 class Job:    
     def __init__(self,name,value,link):
@@ -124,11 +125,9 @@ def findJob(riasec):
     
 def fetch():
     try:
-        mydb=mysql.connector.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"))
-        cursor=mydb.cursor()
-        cursor.execute("select * from jobs")
+        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.DictCursor)
+        mydb.cursor.execute("select * from jobs")
         data = cursor.fetchall()
-        cursor.close()
         mydb.close()
         return data
     except Exception as e:
