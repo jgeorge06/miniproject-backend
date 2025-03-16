@@ -19,7 +19,7 @@ def ED(riasec):
         for i in range (6):
             euclidianDistance+=(riasec[i]-float(job[i+1]))*(riasec[i]-float(job[i+1]))
         euclidianDistance=math.sqrt(euclidianDistance)
-        jobs.append(Job(job[0],euclidianDistance),job[7])
+        jobs.append(Job(job[0],euclidianDistance,job[7]))
         jobs.sort(key=sort)
     return (jobs)
 
@@ -37,7 +37,7 @@ def CR(riasec):
         normUser=math.sqrt(normUser)
         normJob=math.sqrt(normJob)
         profileCorelation=(dotProduct/(normUser*normJob))
-        jobs.append(Job(job[0],profileCorelation),job[7])
+        jobs.append(Job(job[0],profileCorelation,job[7]))
         jobs.sort(key=sort,reverse=1)
     return (jobs)
 
@@ -62,7 +62,7 @@ def PC(riasec):
         denominator1=math.sqrt(denominator1)
         denominator2=math.sqrt(denominator2)
         profileCorelation=(numerator/(denominator1*denominator2))
-        jobs.append(Job(job[0],profileCorelation),job[7])
+        jobs.append(Job(job[0],profileCorelation,job[7]))
         jobs.sort(key=sort,reverse=1)
     return (jobs)
 
@@ -72,7 +72,7 @@ def HPHR(riasec):
     data=fetch()
     for job in data:
         for i in range (6):
-            job[i+1]=float(job[1+1])
+            job[i+1]=float(job[i+1])
         jhigh=findHighs(job[1:])
         if jhigh==high:
             jobs.append(job[0])
@@ -126,7 +126,10 @@ def fetch():
     mydb=mysql.connector.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"))
     cursor=mydb.cursor()
     cursor.execute("select * from jobs")
-    return cursor
+    data = cursor.fetchall()
+    cursor.close()
+    mydb.close()
+    return data
 
     
 def sort(e):
