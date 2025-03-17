@@ -1,6 +1,7 @@
 import os
 import math
-import mysql.connector
+import pymysql
+import pymysql.cursors
 
 class Job:    
     def __init__(self,name,value,link):
@@ -45,6 +46,7 @@ def PC(riasec):
     jobs=[]
     data=fetch()
     for job in data:
+        print(job)
         numerator=0
         denominator1=0
         denominator2=0
@@ -52,6 +54,7 @@ def PC(riasec):
         Y=0
         for i in range (6):
             X+=riasec[i]
+            print(float(job[i+1]))
             Y+=float(job[i+1])
         X/=6
         Y/=6
@@ -123,13 +126,16 @@ def findJob(riasec):
         return pc
     
 def fetch():
-    mydb=mysql.connector.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"))
-    cursor=mydb.cursor()
-    cursor.execute("select * from jobs")
-    data = cursor.fetchall()
-    cursor.close()
-    mydb.close()
-    return data
+    try:
+        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.Cursor)
+        with mydb.cursor() as cursor:
+            cursor.execute("select * from jobs")
+            data = cursor.fetchall()
+        mydb.close()
+        print(data)
+        return data
+    except Exception as e:
+        print("Error: ", e)
 
     
 def sort(e):
