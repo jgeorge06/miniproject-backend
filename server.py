@@ -15,9 +15,14 @@ def job_finder():
             riasec[i]=riasec[i]/8
         result=PC(riasec)
         jobs=[]
+        links=[]
         for i in range(3):
-            jobs.append(result[i].name)            
-        return jsonify({"jobs": jobs})
+            jobs.append(result[i].name)  
+            links.append(result[i].link)
+        return jsonify({
+            "jobs": jobs,
+            "links":links
+            })
     except Exception as e:
         return((str(e)),500)
 
