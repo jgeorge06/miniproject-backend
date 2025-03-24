@@ -132,7 +132,6 @@ def fetch():
             cursor.execute("select * from jobs")
             data = cursor.fetchall()
         mydb.close()
-        print(data)
         return data
     except Exception as e:
         print("Error: ", e)
