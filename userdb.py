@@ -1,30 +1,46 @@
 import os
-import math
 import pymysql
 import pymysql.cursors
 
-riasec=["RIASEC"]
-def store(user,answers):
+riasec = ["R", "I", "A", "S", "E", "C"]  # Corrected RIASEC indexing
+
+def store(user, answers):
     try:
-        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.Cursor)
+        mydb = pymysql.connect(
+            host=os.getenv("MYSQLHOST"),
+            user=os.getenv("MYSQLUSER"),
+            passwd=os.getenv("MYSQLPASSWORD"),
+            database=os.getenv("MYSQLDATABASE"),
+            cursorclass=pymysql.cursors.Cursor
+        )
         with mydb.cursor() as cursor:
-            if retrieve(user)==[]:
-                cursor.execute("insert into users (uid) values ('%s');",user)
+            if not retrieve(user):  # Fixed condition check
+                cursor.execute("INSERT INTO users (uid) VALUES (%s);", (user,))
+
                 for i in range(48):
-                    column=riasec[48/i]+str((48%i)+1)
-                    cursor.execute("update users set %s=%s where uid='%s';" ,column,answers[48],user)
+                    column = riasec[i // 8] + str((i % 8) + 1)  # Corrected indexing
+                    query = "UPDATE users SET {}=%s WHERE uid=%s;".format(column)
+                    cursor.execute(query, (answers[i], user))
+
+        mydb.commit()  # Commit changes
         mydb.close()
     except Exception as e:
-        print("Error: ", e)
+        print("Error:", e)
 
 def retrieve(user):
     try:
-        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.Cursor)
+        mydb = pymysql.connect(
+            host=os.getenv("MYSQLHOST"),
+            user=os.getenv("MYSQLUSER"),
+            passwd=os.getenv("MYSQLPASSWORD"),
+            database=os.getenv("MYSQLDATABASE"),
+            cursorclass=pymysql.cursors.Cursor
+        )
         with mydb.cursor() as cursor:
-            cursor.execute("select * from users where uid='%s';",user)
+            cursor.execute("SELECT * FROM users WHERE uid = %s;", (user,))
             data = cursor.fetchall()
         mydb.close()
-        print(data)
         return data
     except Exception as e:
-        print("Error: ", e)
+        print("Error:", e)
+        return []
