@@ -29,7 +29,7 @@ def job_finder():
             jobs.append(result[i].name)  
             links.append(result[i].link)
         return jsonify({
-            "riasec": riasec,
+            "riasec": fullriasec,
             "jobs": jobs,
             "links":links
             })
