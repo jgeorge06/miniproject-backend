@@ -18,7 +18,7 @@ def job_finder():
         fullriasec=[0,0,0,0,0,0]
         riasec=[0,0,0,0,0,0]
         for i in answers:
-            fullriasec[j%8]+=i
+            fullriasec[int(j/8)]+=i
             j+=1
         for i in range(6):
             riasec[i]=fullriasec[i]/8
