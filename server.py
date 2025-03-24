@@ -37,7 +37,7 @@ def job_finder():
         return((str(e)),500)
 
 @app.route('/data_retriever',methods=['POST'])
-def job_finder():
+def data_retriver():
     try:
         data=request.json
         uid=data.get("uid","")
