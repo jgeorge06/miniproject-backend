@@ -13,6 +13,7 @@ def job_finder():
         data=request.json
         answers=data.get("answers",[])
         uid=data.get("uid","")
+        print(answers,uid)
         store(uid,answers)
         j=0
         fullriasec=[0,0,0,0,0,0]
@@ -21,7 +22,7 @@ def job_finder():
             fullriasec[int(j/8)]+=i
             j+=1
         for i in range(6):
-            riasec[i]=fullriasec[i]/8
+            riasec[i]=float(fullriasec[i]/8)
         result=CR(riasec)
         jobs=[]
         links=[]
