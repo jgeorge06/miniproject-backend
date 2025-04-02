@@ -27,7 +27,7 @@ def calculate(answers):
 
 @app.route('/job_finder',methods=['POST'])
 def job_finder():
-    try:
+    # try:
         data=request.json
         answers=data.get("answers",[])
         uid=data.get("uid","")
@@ -38,8 +38,8 @@ def job_finder():
             "jobs": jobs,
             "links": links
         }))
-    except Exception as e:
-        return((str(e)),500)
+    # except Exception as e:
+    #     return((str(e)),500)
 
 @app.route('/data_retriever',methods=['POST'])
 def data_retriver():
