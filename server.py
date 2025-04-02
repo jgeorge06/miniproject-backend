@@ -17,6 +17,7 @@ def calculate(answers):
         j+=1
     for i in range(6):
         riasec[i]=float(fullriasec[i]/8)
+    print(riasec)
     result=CR(riasec)
     jobs=[]
     links=[]
