@@ -48,7 +48,7 @@ def data_retriver():
         uid=data.get("uid","")
         answers = retrieve(uid)
         if answers:          
-            riasec,jobs,links = calculate(answers)
+            riasec,jobs,links = calculate(answers[1:])
             return(jsonify({
                 "flag": True,
                 "riasec": riasec,
