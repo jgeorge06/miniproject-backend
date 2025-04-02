@@ -16,11 +16,10 @@ def store(user, answers):
         with mydb.cursor() as cursor:
             if not retrieve(user):
                 cursor.execute("INSERT INTO users (uid) VALUES (%s);", (user,))
-
-                for i in range(48):
-                    column = riasec[i // 8] + str((i % 8) + 1)
-                    query = "UPDATE users SET {}=%s WHERE uid=%s;".format(column)
-                    cursor.execute(query, (answers[i], user))
+            for i in range(48):
+                column = riasec[i // 8] + str((i % 8) + 1)
+                query = "UPDATE users SET {}=%s WHERE uid=%s;".format(column)
+                cursor.execute(query, (answers[i], user))
 
         mydb.commit()
         mydb.close()
