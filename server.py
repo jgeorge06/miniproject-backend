@@ -47,17 +47,17 @@ def data_retriver():
         data=request.json
         uid=data.get("uid","")
         answers = retrieve(uid)
-        if answers:
+        if answers:          
+            riasec,jobs,links = calculate(answers)
             return(jsonify({
-                "flag": False
+                "flag": True,
+                "riasec": riasec,
+                "jobs": jobs,
+                "links": links,
+                "answers": answers
             }))
-        riasec,jobs,links = calculate(answers)
         return(jsonify({
-            "flag": True,
-            "riasec": riasec,
-            "jobs": jobs,
-            "links": links,
-            "answers": answers
+            "flag": False
         }))
     except Exception as e:
         return((str(e)),500)
