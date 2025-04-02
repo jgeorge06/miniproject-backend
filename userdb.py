@@ -37,7 +37,9 @@ def retrieve(user):
         )
         with mydb.cursor() as cursor:
             cursor.execute("SELECT * FROM users WHERE uid = %s;", (user,))
+            print (cursor)
             data = cursor.fetchall()
+            print(data)
         mydb.close()
         return data
     except Exception as e:
