@@ -38,7 +38,7 @@ def retrieve(user):
         with mydb.cursor() as cursor:
             cursor.execute("SELECT * FROM users WHERE uid = %s;", (user,))
             print (cursor)
-            data = cursor.fetchall()
+            data = cursor.fetchall().pop()
             print(data)
         mydb.close()
         return data
