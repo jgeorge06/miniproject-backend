@@ -17,7 +17,6 @@ def calculate(answers):
         j+=1
     for i in range(6):
         riasec[i]=float(fullriasec[i]/8)
-    print(riasec)
     result=CR(riasec)
     jobs=[]
     links=[]
@@ -44,12 +43,12 @@ def job_finder():
 
 @app.route('/data_retriever',methods=['POST'])
 def data_retriver():
-    # try:
+    try:
         data=request.json
         uid=data.get("uid","")
-        answers = retrieve(uid)
+        answers = retrieve(uid)[1:]
         if answers:          
-            riasec,jobs,links = calculate(answers[1:])
+            riasec,jobs,links = calculate(answers)
             return(jsonify({
                 "flag": True,
                 "riasec": riasec,
@@ -60,8 +59,8 @@ def data_retriver():
         return(jsonify({
             "flag": False
         }))
-    # except Exception as e:
-    #     return((str(e)),500)
+    except Exception as e:
+        return((str(e)),500)
     
 if __name__=='__main__':
     port = int(os.environ.get("PORT",8080))
