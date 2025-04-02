@@ -8,21 +8,21 @@ class Job:
         self.name=name
         self.value=value
         self.link=link
-        
-    def __str__(self):
-        return f"{self.name}({self.value})"
-        
-def ED(riasec):
-    jobs=[]
-    data=fetch()
-    for job in data:
-        euclidianDistance=0
-        for i in range (6):
-            euclidianDistance+=(riasec[i]-float(job[i+1]))*(riasec[i]-float(job[i+1]))
-        euclidianDistance=math.sqrt(euclidianDistance)
-        jobs.append(Job(job[0],euclidianDistance,job[7]))
-        jobs.sort(key=sort)
-    return (jobs)
+
+def fetch():
+    try:
+        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.Cursor)
+        with mydb.cursor() as cursor:
+            cursor.execute("select * from jobs")
+            data = cursor.fetchall()
+        mydb.close()
+        return data
+    except Exception as e:
+        pass
+    
+def sort(e):
+    return e.value
+
 
 def CR(riasec):
     jobs=[]
@@ -42,11 +42,22 @@ def CR(riasec):
         jobs.sort(key=sort,reverse=1)
     return (jobs)
 
+def ED(riasec):
+    jobs=[]
+    data=fetch()
+    for job in data:
+        euclidianDistance=0
+        for i in range (6):
+            euclidianDistance+=(riasec[i]-float(job[i+1]))*(riasec[i]-float(job[i+1]))
+        euclidianDistance=math.sqrt(euclidianDistance)
+        jobs.append(Job(job[0],euclidianDistance,job[7]))
+        jobs.sort(key=sort)
+    return (jobs)
+
 def PC(riasec):
     jobs=[]
     data=fetch()
     for job in data:
-        print(job)
         numerator=0
         denominator1=0
         denominator2=0
@@ -124,20 +135,3 @@ def findJob(riasec):
             if i.name not in suited:
                 pc.pop(pc.index(i))
         return pc
-    
-def fetch():
-    try:
-        mydb=pymysql.connect(host=os.getenv("MYSQLHOST"),user=os.getenv("MYSQLUSER"), passwd=os.getenv("MYSQLPASSWORD"), database=os.getenv("MYSQLDATABASE"),cursorclass=pymysql.cursors.Cursor)
-        with mydb.cursor() as cursor:
-            cursor.execute("select * from jobs")
-            data = cursor.fetchall()
-        mydb.close()
-        return data
-    except Exception as e:
-        print("Error: ", e)
-
-    
-def sort(e):
-    return e.value
-
-

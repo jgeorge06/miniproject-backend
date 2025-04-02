@@ -7,33 +7,37 @@ from flask_cors import CORS
 app=Flask(__name__)
 CORS(app)
 
+
+def calculate(answers):
+    j=0
+    fullriasec=[0,0,0,0,0,0]
+    riasec=[0,0,0,0,0,0]
+    for i in answers:
+        fullriasec[j%8]+=i
+        j+=1
+    for i in range(6):
+        riasec[i]=fullriasec[i]/8
+    result=CR(riasec)
+    jobs=[]
+    links=[]
+    for i in range(3):
+        jobs.append(result[i].name)  
+        links.append(result[i].link)
+    return (riasec,jobs,links)
+
 @app.route('/job_finder',methods=['POST'])
 def job_finder():
     try:
         data=request.json
         answers=data.get("answers",[])
         uid=data.get("uid","")
-        print(answers,uid)
         store(uid,answers)
-        j=0
-        fullriasec=[0,0,0,0,0,0]
-        riasec=[0,0,0,0,0,0]
-        for i in answers:
-            fullriasec[int(j/8)]+=i
-            j+=1
-        for i in range(6):
-            riasec[i]=float(fullriasec[i]/8)
-        result=CR(riasec)
-        jobs=[]
-        links=[]
-        for i in range(3):
-            jobs.append(result[i].name)  
-            links.append(result[i].link)
-        return jsonify({
-            "riasec": fullriasec,
+        riasec,jobs,links = calculate(answers)
+        return(jsonify({
+            "riasec": riasec,
             "jobs": jobs,
-            "links":links
-            })
+            "links": links
+        }))
     except Exception as e:
         return((str(e)),500)
 
@@ -43,25 +47,18 @@ def data_retriver():
         data=request.json
         uid=data.get("uid","")
         answers = retrieve(uid)
-        j=0
-        fullriasec=[0,0,0,0,0,0]
-        riasec=[0,0,0,0,0,0]
-        for i in answers:
-            fullriasec[j%8]+=i
-            j+=1
-        for i in range(6):
-            riasec[i]=fullriasec[i]/8
-        result=CR(riasec)
-        jobs=[]
-        links=[]
-        for i in range(3):
-            jobs.append(result[i].name)  
-            links.append(result[i].link)
-        return jsonify({
+        if answers:
+            return(jsonify({
+                "flag": False
+            }))
+        riasec,jobs,links = calculate(answers)
+        return(jsonify({
+            "flag": True,
             "riasec": riasec,
             "jobs": jobs,
-            "links":links
-            })
+            "links": links,
+            "answers": answers
+        }))
     except Exception as e:
         return((str(e)),500)
     
