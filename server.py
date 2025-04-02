@@ -23,7 +23,7 @@ def calculate(answers):
     for i in range(3):
         jobs.append(result[i].name)  
         links.append(result[i].link)
-    return (riasec,jobs,links)
+    return (fullriasec,jobs,links)
 
 @app.route('/job_finder',methods=['POST'])
 def job_finder():
