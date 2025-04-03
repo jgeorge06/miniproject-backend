@@ -20,7 +20,7 @@ def calculate(answers):
     result=CR(riasec)
     jobs=[]
     links=[]
-    for i in range(3):
+    for i in range(2):
         jobs.append(result[i].name)  
         links.append(result[i].link)
     return (fullriasec,jobs,links)
