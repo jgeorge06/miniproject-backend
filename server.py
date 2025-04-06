@@ -20,7 +20,7 @@ def calculate(answers):
     result=CR(riasec)
     jobs=[]
     links=[]
-    for i in range(2):
+    for i in range(3):
         jobs.append(result[i].name)  
         links.append(result[i].link)
     return (fullriasec,jobs,links)
@@ -33,11 +33,13 @@ def job_finder():
         uid=data.get("uid","")
         store(uid,answers)
         riasec,jobs,links = calculate(answers)
-        return(jsonify({
+        json=jsonify({
             "riasec": riasec,
             "jobs": jobs,
             "links": links
-        }))
+        })
+        print (json)
+        return json
     except Exception as e:
         return((str(e)),500)
 
@@ -49,13 +51,15 @@ def data_retriver():
         answers = retrieve(uid)
         if answers:          
             riasec,jobs,links = calculate(answers[1:])
-            return(jsonify({
+            json = jsonify({
                 "flag": True,
                 "riasec": riasec,
                 "jobs": jobs,
                 "links": links,
                 "answers": answers[1:]
-            }))
+            })
+            print (json)
+            return json
         return(jsonify({
             "flag": False
         }))
